@@ -4,6 +4,7 @@ FROM node:${NODE_VERSION}-alpine AS builder
 WORKDIR /usr/src/app
 
 COPY package.json package-lock.json ./
+COPY patches ./patches
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --legacy-peer-deps
 

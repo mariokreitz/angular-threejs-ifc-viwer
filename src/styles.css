@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #efefef;
+}
+
+@layer base {
+  :root {
+    --panel-width: 288px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: rgba(212, 212, 212, 0.2);
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-down {
+    animation: fade-in-down 0.15s ease-out both;
+  }
+}

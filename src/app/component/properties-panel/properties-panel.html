@@ -1,0 +1,95 @@
+<aside
+  aria-label="IFC properties panel"
+  class="flex h-full flex-col overflow-hidden border-l border-subtle bg-surface-panel transition-[width,min-width] duration-300 ease-out-expo"
+  [class.min-w-10]="collapsed()"
+  [class.min-w-72]="!collapsed()"
+  [class.w-10]="collapsed()"
+  [class.w-72]="!collapsed()"
+>
+  <h2 class="sr-only">IFC element controls</h2>
+
+  <div class="flex shrink-0 items-center justify-between border-b border-subtle px-4 py-3.5">
+    @if (!collapsed()) {
+      <span class="text-[10px] font-semibold tracking-widest text-ifc-subtle uppercase">Properties</span>
+    }
+
+    <button
+      class="ml-auto flex h-6 w-6 items-center justify-center rounded-md text-ifc-subtle transition-colors duration-120 hover:bg-surface-overlay hover:text-ifc-text"
+      type="button"
+      [attr.aria-label]="collapsed() ? 'Expand panel' : 'Collapse panel'"
+      (click)="toggleCollapse()"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="14"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="14"
+      >
+        <path [attr.d]="collapsed() ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6'" />
+      </svg>
+    </button>
+  </div>
+
+  <div
+    class="flex flex-1 flex-col gap-5 overflow-y-auto px-4 py-4 transition-opacity duration-200 [scrollbar-color:rgba(255,255,255,0.1)_transparent] [scrollbar-width:thin]"
+    [attr.aria-hidden]="collapsed()"
+    [class.opacity-0]="collapsed()"
+    [class.pointer-events-none]="collapsed()"
+  >
+    <section class="flex flex-col gap-2">
+      <label class="text-[10px] font-semibold tracking-[0.12em] text-ifc-subtle uppercase" for="ifc-model-select">
+        Model
+      </label>
+
+      <select
+        class="w-full rounded-lg border border-subtle bg-surface-raised px-2.5 py-2 text-sm text-ifc-text transition-colors duration-120 hover:border-strong focus-visible:border-accent-primary focus-visible:outline-none"
+        id="ifc-model-select"
+        [value]="selectedModelUrl() ?? ''"
+        (change)="modelChange.emit($any($event.target).value)"
+      >
+        @for (model of availableModels(); track model.url) {
+          <option [value]="model.url">{{ model.label }}</option>
+        }
+      </select>
+    </section>
+
+    @switch (activeMode()) {
+      @case (InteractionMode.Measure) {
+        <app-panel-measurements
+          [activeMeasurement]="activeMeasurement()"
+          [measurements]="measurements()"
+          [selectedId]="selectedId()"
+          (clearAll)="clearAll.emit()"
+          (deleteMeasurement)="deleteMeasurement.emit($event)"
+          (selectMeasurement)="selectMeasurement.emit($event)"
+        />
+      }
+      @case (InteractionMode.MeasureArea) {
+        <app-panel-area-measurements
+          [activeAreaPoints]="activeAreaPoints()"
+          [areaMeasurements]="areaMeasurements()"
+          [selectedAreaId]="selectedAreaId()"
+          (clearAllAreas)="clearAllAreas.emit()"
+          (deleteArea)="deleteArea.emit($event)"
+          (selectArea)="selectArea.emit($event)"
+        />
+      }
+      @default {
+        @if (selectedElement(); as element) {
+          <app-panel-selection
+            [selectedElement]="element"
+            (colorChange)="colorChange.emit($event)"
+            (deselect)="deselect.emit()"
+            (resetColor)="resetColor.emit()"
+          />
+        } @else {
+          <app-panel-idle />
+        }
+      }
+    }
+  </div>
+</aside>

@@ -1,0 +1,32 @@
+<div class="pointer-events-none absolute top-4 left-1/2 z-40 flex -translate-x-1/2 flex-col items-center gap-1.5">
+  <div
+    class="flex items-center gap-1.5 rounded-full border border-subtle bg-surface-panel/85 px-3 py-1 text-[11px] font-semibold tracking-widest text-ifc-muted uppercase backdrop-blur-md"
+  >
+    <span
+      class="h-1.5 w-1.5 rounded-full transition-colors duration-200"
+      [class]="
+        isMeasureMode()
+          ? 'h-1.5 w-1.5 rounded-full bg-accent-primary shadow-[0_0_6px_theme(colors.accent.primary)] transition-colors duration-200'
+          : 'h-1.5 w-1.5 rounded-full bg-ifc-subtle transition-colors duration-200'
+      "
+    ></span>
+    {{ modeLabel() }}
+  </div>
+
+  @if (hoveredType() && !isMeasureMode()) {
+    <div
+      class="animate-fade-in-down flex items-center gap-1.5 rounded-xl border border-accent-primary/20 bg-accent-primary/8 px-2.5 py-1 text-[11px] text-accent-primary"
+    >
+      <span class="text-[8px] opacity-60">&#9672;</span>
+      {{ hoveredType() }}
+    </div>
+  }
+
+  @if (isMeasureMode() && measureHint()) {
+    <div
+      class="rounded-lg border border-subtle bg-surface-panel/80 px-3 py-1.5 text-[11px] text-ifc-muted backdrop-blur-sm"
+    >
+      {{ measureHint() }}
+    </div>
+  }
+</div>

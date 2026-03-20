@@ -1,0 +1,105 @@
+<section class="flex flex-col gap-3">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-1.5">
+      <span class="h-1 w-1 rounded-full bg-accent-primary"></span>
+      <span class="text-[10px] font-semibold tracking-[0.12em] text-ifc-subtle uppercase">Areas</span>
+    </div>
+
+    @if (areaMeasurements().length > 0) {
+      <button
+        class="text-xs text-ifc-subtle transition-colors duration-120 hover:text-accent-danger"
+        type="button"
+        (click)="clearAllAreas.emit()"
+      >
+        Clear all
+      </button>
+    }
+  </div>
+
+  @if (activeAreaPoints() === 0 && areaMeasurements().length === 0) {
+    <p class="text-sm text-ifc-muted">
+      Click points on the model surface to define a polygon. Click the first point again to close it.
+    </p>
+  }
+
+  @if (activeAreaPoints() > 0) {
+    <div class="rounded-xl border border-subtle bg-surface-raised p-3 text-sm">
+      <p class="font-mono text-accent-primary">
+        {{ activeAreaPoints() }} point{{ activeAreaPoints() > 1 ? 's' : '' }} placed
+      </p>
+      <p class="mt-1 text-xs text-ifc-subtle">
+        @if (activeAreaPoints() < 3) {
+          Place {{ 3 - activeAreaPoints() }} more to close
+        } @else {
+          Click the first point (white marker) to close
+        }
+      </p>
+    </div>
+  }
+
+  @for (areaMeasurement of areaMeasurements(); track areaMeasurement.id; let index = $index) {
+    <div
+      class="rounded-xl border px-3 py-2.5 transition-colors duration-120"
+      [class.bg-accent-primary]="selectedAreaId() === areaMeasurement.id"
+      [class.bg-opacity-10]="selectedAreaId() === areaMeasurement.id"
+      [class.bg-surface-raised]="selectedAreaId() !== areaMeasurement.id"
+      [class.border-accent-primary]="selectedAreaId() === areaMeasurement.id"
+      [class.border-opacity-40]="selectedAreaId() === areaMeasurement.id"
+      [class.border-subtle]="selectedAreaId() !== areaMeasurement.id"
+      [class.hover:bg-surface-overlay]="selectedAreaId() !== areaMeasurement.id"
+      [class.hover:border-strong]="selectedAreaId() !== areaMeasurement.id"
+    >
+      <div class="mb-1 flex items-center justify-between">
+        <button
+          class="min-w-0 flex-1 rounded-md text-left focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-surface-panel"
+          type="button"
+          (click)="selectArea.emit(areaMeasurement.id)"
+        >
+          <span class="text-[10px] text-ifc-subtle"
+            >Area #{{ index + 1 }} · {{ areaMeasurement.points.length }} points</span
+          >
+
+          <p class="font-mono text-xl font-medium tracking-tight text-accent-primary">
+            {{ areaMeasurement.formatted }}
+          </p>
+
+          @if (selectedAreaId() === areaMeasurement.id) {
+            <p class="mt-1.5 text-[10px] text-ifc-subtle opacity-60">Drag a marker in the scene to reposition</p>
+          }
+        </button>
+
+        <button
+          class="ml-2 self-start px-1 text-[11px] text-ifc-subtle transition-colors duration-120 hover:text-accent-danger focus-visible:ring-2 focus-visible:ring-accent-danger/40 focus-visible:ring-offset-1 focus-visible:ring-offset-surface-panel"
+          type="button"
+          (click)="onDeleteArea($event, areaMeasurement.id)"
+        >
+          &#10005;
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (areaMeasurements().length > 0) {
+    <div
+      class="flex items-start gap-2 rounded-xl border border-subtle bg-surface-overlay/60 p-2.5 text-[11px] text-ifc-subtle"
+    >
+      <svg
+        aria-hidden="true"
+        class="mt-0.5 shrink-0 text-ifc-subtle"
+        fill="none"
+        height="12"
+        stroke="currentColor"
+        stroke-width="1.6"
+        viewBox="0 0 16 16"
+        width="12"
+      >
+        <circle cx="8" cy="8" r="7" />
+        <path d="M8 7v5M8 5.5v.5" stroke-linecap="round" />
+      </svg>
+      <span>
+        Area in <strong class="font-medium text-ifc-muted">{{ areaMeasurements()[0].unit.symbol }}2</strong> from
+        <code class="font-mono text-[10px] text-ifc-muted">IFCUNITASSIGNMENT</code>.
+      </span>
+    </div>
+  }
+</section>

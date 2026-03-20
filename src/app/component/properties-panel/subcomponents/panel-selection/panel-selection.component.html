@@ -1,0 +1,94 @@
+<section class="flex flex-col gap-5">
+  <div>
+    <div class="mb-3 flex items-center gap-1.5">
+      <span class="h-1 w-1 rounded-full bg-accent-primary"></span>
+      <span class="text-[10px] font-semibold tracking-[0.12em] text-ifc-subtle uppercase">Selected</span>
+    </div>
+
+    <p class="text-lg leading-tight font-semibold tracking-tight text-ifc-text">
+      {{ selectedElement().ifcType }}
+    </p>
+    <p class="mt-0.5 text-[11px] text-ifc-subtle">
+      ID <span class="font-mono text-ifc-muted">{{ selectedElement().expressID }}</span>
+    </p>
+  </div>
+
+  <div class="-mx-4 h-px bg-white/[0.07]"></div>
+
+  <section class="flex flex-col gap-3">
+    <div class="flex items-center gap-1.5">
+      <span class="h-1 w-1 rounded-full bg-accent-primary"></span>
+      <span class="text-[10px] font-semibold tracking-[0.12em] text-ifc-subtle uppercase">Color</span>
+    </div>
+
+    <label class="flex items-center justify-between text-sm text-ifc-muted">
+      Pick color
+      <input
+        class="h-9 w-9 cursor-pointer rounded-lg border-0 bg-transparent p-0.5"
+        type="color"
+        [value]="currentColor()"
+        (input)="onColorInput($event)"
+      />
+    </label>
+
+    <div class="flex flex-wrap gap-2">
+      @for (swatch of presetColors; track swatch) {
+        <button
+          class="h-7 w-7 rounded-full border-2 transition-transform duration-120 hover:scale-110 focus-visible:ring-2 focus-visible:ring-accent-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-panel"
+          type="button"
+          [attr.title]="swatch"
+          [class.border-ifc-text]="currentColor() === swatch"
+          [class.border-transparent]="currentColor() !== swatch"
+          [class.scale-110]="currentColor() === swatch"
+          [style.background]="swatch"
+          (click)="onSwatchClick(swatch)"
+        ></button>
+      }
+    </div>
+  </section>
+
+  <div class="-mx-4 h-px bg-white/[0.07]"></div>
+
+  <section class="flex flex-col gap-2">
+    <button
+      class="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left text-[13px] font-medium text-ifc-muted transition-colors duration-120 hover:bg-surface-overlay hover:text-ifc-text"
+      type="button"
+      (click)="resetColor.emit()"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="13"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="13"
+      >
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+      </svg>
+      Reset to original
+    </button>
+
+    <button
+      class="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left text-[13px] font-medium text-ifc-muted transition-colors duration-120 hover:bg-accent-danger/10 hover:text-accent-danger"
+      type="button"
+      (click)="deselect.emit()"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="13"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="13"
+      >
+        <path d="M18 6 6 18M6 6l12 12" />
+      </svg>
+      Deselect
+    </button>
+  </section>
+</section>

@@ -1,0 +1,24 @@
+@if (visible()) {
+  <div
+    class="pointer-events-none absolute bottom-5 left-1/2 z-40 flex -translate-x-1/2 items-center gap-4 rounded-full border border-subtle bg-surface-panel/82 px-4 py-2.5 backdrop-blur-md"
+    [class.duration-700]="fading()"
+    [class.opacity-0]="fading()"
+    [class.transition-opacity]="fading()"
+  >
+    @for (
+      hint of [
+        { key: 'Left drag', action: 'Orbit' },
+        { key: 'Right drag', action: 'Pan' },
+        { key: 'Scroll', action: 'Zoom' },
+      ];
+      track hint.key
+    ) {
+      <div class="flex items-center gap-1.5 text-[11px] text-ifc-muted">
+        <kbd class="rounded border border-strong bg-surface-overlay px-1.5 py-0.5 font-mono text-[10px] text-ifc-text">
+          {{ hint.key }}
+        </kbd>
+        {{ hint.action }}
+      </div>
+    }
+  </div>
+}

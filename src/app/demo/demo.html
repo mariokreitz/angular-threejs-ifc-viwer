@@ -1,0 +1,59 @@
+<div class="flex h-screen w-screen overflow-hidden bg-surface-base font-sans text-ifc-text">
+  <div #viewportContainer aria-label="3D IFC viewer" class="relative min-h-0 flex-1 overflow-hidden" role="region">
+    <canvas
+      #rendererCanvas
+      class="block h-full w-full outline-none"
+      (mousedown)="sceneService.onMouseDown($event)"
+      (mouseup)="sceneService.onMouseUp()"
+    ></canvas>
+
+    <app-scene-toolbox [activeMode]="activeMode()" (modeChange)="sceneService.setMode($event)" />
+
+    <app-context-hud [activeMode]="activeMode()" [hoveredType]="hoveredType()" />
+
+    <app-camera-hint />
+
+    <div class="pointer-events-none absolute top-4 right-4 z-30 flex max-w-sm flex-col items-end gap-2">
+      @if (loadingProgress() > 0 && loadingProgress() < 100) {
+        <p
+          aria-live="polite"
+          class="rounded-xl border border-subtle bg-surface-panel/80 px-3 py-1.5 font-mono text-xs text-ifc-muted backdrop-blur-sm"
+        >
+          Loading IFC {{ loadingProgress() }}%
+        </p>
+      }
+
+      @if (loadError(); as errorMessage) {
+        <p
+          aria-live="polite"
+          class="rounded-xl border border-accent-danger/35 bg-accent-danger/10 px-3 py-1.5 text-xs text-accent-danger"
+        >
+          {{ errorMessage }}
+        </p>
+      }
+    </div>
+  </div>
+
+  <app-properties-panel
+    [activeAreaPoints]="activeAreaPoints()"
+    [activeMeasurement]="activeMeasurement()"
+    [activeMode]="activeMode()"
+    [areaMeasurements]="areaMeasurements()"
+    [availableModels]="availableModels"
+    [measurements]="measurements()"
+    [selectedAreaId]="selectedAreaId()"
+    [selectedElement]="selectedElement()"
+    [selectedId]="selectedMeasurementId()"
+    [selectedModelUrl]="selectedModelUrl()"
+    (clearAll)="onClearAllMeasurements()"
+    (clearAllAreas)="onClearAllAreas()"
+    (colorChange)="onColorChange($event)"
+    (deleteArea)="onDeleteArea($event)"
+    (deleteMeasurement)="onDeleteMeasurement($event)"
+    (deselect)="onDeselect()"
+    (modelChange)="onModelChange($event)"
+    (resetColor)="onResetColor()"
+    (selectArea)="onSelectArea($event)"
+    (selectMeasurement)="onSelectMeasurement($event)"
+  />
+</div>

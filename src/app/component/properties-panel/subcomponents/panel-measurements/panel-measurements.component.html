@@ -1,0 +1,94 @@
+<section class="flex flex-col gap-3">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-1.5">
+      <span class="h-1 w-1 rounded-full bg-accent-primary"></span>
+      <span class="text-[10px] font-semibold tracking-[0.12em] text-ifc-subtle uppercase">Measurements</span>
+    </div>
+
+    @if (measurements().length > 0) {
+      <button
+        class="text-xs text-ifc-subtle transition-colors duration-120 hover:text-accent-danger"
+        type="button"
+        (click)="clearAll.emit()"
+      >
+        Clear all
+      </button>
+    }
+  </div>
+
+  @if (measurements().length === 0 && !activeMeasurement()) {
+    <p class="text-sm text-ifc-muted">Click a first point on the model</p>
+  }
+
+  @if (activeMeasurement()) {
+    <p class="text-sm text-accent-primary">Click a second point to complete</p>
+  }
+
+  @for (measurement of measurements(); track measurement.id; let index = $index) {
+    <div
+      class="rounded-xl border px-3 py-2.5 transition-colors duration-120"
+      [class.bg-accent-primary]="selectedId() === measurement.id"
+      [class.bg-opacity-10]="selectedId() === measurement.id"
+      [class.bg-surface-raised]="selectedId() !== measurement.id"
+      [class.border-accent-primary]="selectedId() === measurement.id"
+      [class.border-opacity-40]="selectedId() === measurement.id"
+      [class.border-subtle]="selectedId() !== measurement.id"
+      [class.hover:bg-surface-overlay]="selectedId() !== measurement.id"
+      [class.hover:border-strong]="selectedId() !== measurement.id"
+    >
+      <div class="mb-1 flex items-center justify-between">
+        <button
+          class="min-w-0 flex-1 rounded-md text-left focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-surface-panel"
+          type="button"
+          (click)="selectMeasurement.emit(measurement.id)"
+        >
+          <span class="text-[10px] text-ifc-subtle">#{{ index + 1 }}</span>
+
+          <p class="font-mono text-xl font-medium tracking-tight text-accent-primary">{{ measurement.formatted }}</p>
+
+          @if (selectedId() === measurement.id) {
+            <div class="mt-2 font-mono text-[10px] leading-relaxed text-ifc-subtle">
+              A {{ measurement.pointA | vector3 }} {{ measurement.unit.symbol }}<br />
+              B {{ measurement.pointB | vector3 }} {{ measurement.unit.symbol }}
+            </div>
+            <p class="mt-1.5 text-[10px] text-ifc-subtle opacity-60">Drag a marker in the scene to reposition</p>
+          }
+        </button>
+
+        <button
+          class="ml-2 self-start px-1 text-[11px] text-ifc-subtle transition-colors duration-120 hover:text-accent-danger focus-visible:ring-2 focus-visible:ring-accent-danger/40 focus-visible:ring-offset-1 focus-visible:ring-offset-surface-panel"
+          type="button"
+          (click)="onDeleteMeasurement($event, measurement.id)"
+        >
+          &#10005;
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (measurements().length > 0) {
+    <div
+      class="flex items-start gap-2 rounded-xl border border-subtle bg-surface-overlay/60 p-2.5 text-[11px] text-ifc-subtle"
+    >
+      <svg
+        aria-hidden="true"
+        class="mt-0.5 shrink-0 text-ifc-subtle"
+        fill="none"
+        height="12"
+        stroke="currentColor"
+        stroke-width="1.6"
+        viewBox="0 0 16 16"
+        width="12"
+      >
+        <circle cx="8" cy="8" r="7" />
+        <path d="M8 7v5M8 5.5v.5" stroke-linecap="round" />
+      </svg>
+      <span>
+        Unit
+        <strong class="font-medium text-ifc-muted">{{ measurements()[0].unit.symbol }}</strong>
+        from <code class="font-mono text-[10px] text-ifc-muted">IFCUNITASSIGNMENT</code>. 1
+        {{ measurements()[0].unit.symbol }} = {{ measurements()[0].unit.toMetres }} m.
+      </span>
+    </div>
+  }
+</section>

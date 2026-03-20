@@ -1,0 +1,163 @@
+<div
+  aria-label="Scene tools"
+  class="pointer-events-auto absolute z-50 flex select-none flex-col items-center gap-0.5 rounded-2xl border border-strong bg-surface-panel/90 p-1.5 backdrop-blur-md shadow-[0_4px_6px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.04)] transition-shadow duration-120"
+  role="toolbar"
+  [class.shadow-2xl]="isDragging()"
+  [style.left.px]="position().x"
+  [style.top.px]="position().y"
+>
+  <div
+    class="flex h-4 w-7 cursor-grab items-center justify-center rounded-md transition-colors duration-120 hover:bg-surface-overlay active:cursor-grabbing"
+    title="Drag to reposition"
+    (mousedown)="onDragStart($event)"
+  >
+    <svg aria-hidden="true" fill="none" height="10" viewBox="0 0 12 10" width="12">
+      <circle cx="3" cy="2" fill="rgba(255,255,255,0.25)" r="1" />
+      <circle cx="9" cy="2" fill="rgba(255,255,255,0.25)" r="1" />
+      <circle cx="3" cy="5" fill="rgba(255,255,255,0.25)" r="1" />
+      <circle cx="9" cy="5" fill="rgba(255,255,255,0.25)" r="1" />
+      <circle cx="3" cy="8" fill="rgba(255,255,255,0.25)" r="1" />
+      <circle cx="9" cy="8" fill="rgba(255,255,255,0.25)" r="1" />
+    </svg>
+  </div>
+
+  <div class="my-0.5 h-px w-5 bg-white/10"></div>
+
+  <div class="group relative flex items-center">
+    <span
+      class="pointer-events-none absolute top-1/2 left-0 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-primary transition-opacity duration-120"
+      [class.opacity-0]="activeMode() !== InteractionMode.Select"
+      [class.opacity-100]="activeMode() === InteractionMode.Select"
+    ></span>
+    <button
+      aria-label="Select (S)"
+      class="flex h-9 w-9 items-center justify-center rounded-xl border border-transparent pl-1 transition-colors duration-120"
+      type="button"
+      [attr.aria-pressed]="activeMode() === InteractionMode.Select"
+      [class.bg-accent-primary]="activeMode() === InteractionMode.Select"
+      [class.bg-opacity-10]="activeMode() === InteractionMode.Select"
+      [class.hover:bg-surface-overlay]="activeMode() !== InteractionMode.Select"
+      [class.hover:text-ifc-text]="activeMode() !== InteractionMode.Select"
+      [class.text-accent-primary]="activeMode() === InteractionMode.Select"
+      [class.text-ifc-muted]="activeMode() !== InteractionMode.Select"
+      (click)="onToolClick(InteractionMode.Select)"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="1.8"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <path d="m4 4 7.07 17 2.51-7.39L21 11.07z" />
+      </svg>
+    </button>
+
+    <div
+      class="pointer-events-none absolute top-1/2 left-full z-10 ml-2.5 flex -translate-y-1/2 -translate-x-1.5 items-center gap-1.5 rounded-lg border border-strong bg-surface-panel/95 px-2.5 py-1.5 text-xs whitespace-nowrap text-ifc-text opacity-0 shadow-lg transition-all duration-120 ease-out-expo group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100"
+    >
+      Select
+      <kbd class="rounded border border-strong bg-surface-overlay px-1 py-0.5 font-mono text-[10px] text-ifc-subtle"
+        >S</kbd
+      >
+      <span class="absolute top-1/2 right-full -translate-y-1/2 border-[5px] border-transparent border-r-strong"></span>
+    </div>
+  </div>
+
+  <div class="group relative flex items-center">
+    <span
+      class="pointer-events-none absolute top-1/2 left-0 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-primary transition-opacity duration-120"
+      [class.opacity-0]="activeMode() !== InteractionMode.Measure"
+      [class.opacity-100]="activeMode() === InteractionMode.Measure"
+    ></span>
+    <button
+      aria-label="Measure distance (R)"
+      class="flex h-9 w-9 items-center justify-center rounded-xl border border-transparent pl-1 transition-colors duration-120"
+      type="button"
+      [attr.aria-pressed]="activeMode() === InteractionMode.Measure"
+      [class.bg-accent-primary]="activeMode() === InteractionMode.Measure"
+      [class.bg-opacity-10]="activeMode() === InteractionMode.Measure"
+      [class.hover:bg-surface-overlay]="activeMode() !== InteractionMode.Measure"
+      [class.hover:text-ifc-text]="activeMode() !== InteractionMode.Measure"
+      [class.text-accent-primary]="activeMode() === InteractionMode.Measure"
+      [class.text-ifc-muted]="activeMode() !== InteractionMode.Measure"
+      (click)="onToolClick(InteractionMode.Measure)"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="1.8"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <path
+          d="M21.3 8.7 8.7 21.3c-.4.4-.8.6-1.3.6H3a1 1 0 0 1-1-1v-4.4c0-.5.2-.9.6-1.3L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4Z"
+        />
+        <path d="m7.5 10.5 2 2" />
+        <path d="m10.5 7.5 2 2" />
+        <path d="m13.5 4.5 2 2" />
+        <path d="m4.5 13.5 2 2" />
+      </svg>
+    </button>
+
+    <div
+      class="pointer-events-none absolute top-1/2 left-full z-10 ml-2.5 flex -translate-y-1/2 -translate-x-1.5 items-center gap-1.5 rounded-lg border border-strong bg-surface-panel/95 px-2.5 py-1.5 text-xs whitespace-nowrap text-ifc-text opacity-0 shadow-lg transition-all duration-120 ease-out-expo group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100"
+    >
+      Measure distance
+      <kbd class="rounded border border-strong bg-surface-overlay px-1 py-0.5 font-mono text-[10px] text-ifc-subtle"
+        >R</kbd
+      >
+      <span class="absolute top-1/2 right-full -translate-y-1/2 border-[5px] border-transparent border-r-strong"></span>
+    </div>
+  </div>
+
+  <div class="group relative flex items-center">
+    <span
+      class="pointer-events-none absolute top-1/2 left-0 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-primary transition-opacity duration-120"
+      [class.opacity-0]="activeMode() !== InteractionMode.MeasureArea"
+      [class.opacity-100]="activeMode() === InteractionMode.MeasureArea"
+    ></span>
+    <button
+      aria-label="Measure area (A)"
+      class="flex h-9 w-9 items-center justify-center rounded-xl border border-transparent pl-1 transition-colors duration-120"
+      type="button"
+      [attr.aria-pressed]="activeMode() === InteractionMode.MeasureArea"
+      [class.bg-accent-primary]="activeMode() === InteractionMode.MeasureArea"
+      [class.bg-opacity-10]="activeMode() === InteractionMode.MeasureArea"
+      [class.hover:bg-surface-overlay]="activeMode() !== InteractionMode.MeasureArea"
+      [class.hover:text-ifc-text]="activeMode() !== InteractionMode.MeasureArea"
+      [class.text-accent-primary]="activeMode() === InteractionMode.MeasureArea"
+      [class.text-ifc-muted]="activeMode() !== InteractionMode.MeasureArea"
+      (click)="onToolClick(InteractionMode.MeasureArea)"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="1.8"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <path d="M12 2L2 9l4 11h12l4-11L12 2Z" />
+      </svg>
+    </button>
+
+    <div
+      class="pointer-events-none absolute top-1/2 left-full z-10 ml-2.5 flex -translate-y-1/2 -translate-x-1.5 items-center gap-1.5 rounded-lg border border-strong bg-surface-panel/95 px-2.5 py-1.5 text-xs whitespace-nowrap text-ifc-text opacity-0 shadow-lg transition-all duration-120 ease-out-expo group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100"
+    >
+      Measure area
+      <kbd class="rounded border border-strong bg-surface-overlay px-1 py-0.5 font-mono text-[10px] text-ifc-subtle"
+        >A</kbd
+      >
+      <span class="absolute top-1/2 right-full -translate-y-1/2 border-[5px] border-transparent border-r-strong"></span>
+    </div>
+  </div>
+</div>

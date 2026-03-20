@@ -1,32 +1,83 @@
-# Copilot Configuration
+# angular-threejs-ifc-viewer
 
-This directory contains repository-specific GitHub Copilot customization for Angular 21+, Tailwind CSS v4, and IFC-aware 3D workflows.
+A minimal Angular demo for loading and exploring IFC building models in the browser using Three.js.
 
-## Structure
+Built with Angular 21+, standalone components, signals, zoneless change detection, and `web-ifc-three` for IFC parsing and rendering.
 
-- `copilot-instructions.md`: Global guidance used across tasks.
-- `agents/`: Named task-oriented agents.
-- `instructions/`: Scoped rules automatically applied by file pattern.
-- `skills/`: Reusable workflow capabilities.
-- `prompts/`: Reusable slash-command prompts.
-- `copilot-memory.md`: Repository memory hygiene playbook for keeping persistent Copilot signals accurate.
+---
 
-## Angular-focused artifacts
+## Tech Stack
 
-- `instructions/angular-application.instructions.md`
-- `instructions/angular-reactivity.instructions.md`
-- `instructions/angular-routing.instructions.md`
-- `instructions/angular-forms.instructions.md`
-- `instructions/angular-testing.instructions.md`
-- `instructions/copilot-memory.instructions.md`
-- `skills/angular-developer/SKILL.md`
-- `skills/angular-feature-delivery/SKILL.md`
-- `agents/angular-feature-delivery.agent.md`
-- `agents/frontend-architecture-review.agent.md`
+| Layer | Technology |
+|---|---|
+| Framework | Angular 21+ (standalone, signals, zoneless) |
+| 3D Rendering | Three.js + angular-three |
+| IFC Loading | web-ifc / web-ifc-three |
+| Styling | Tailwind CSS v4 |
+| Testing | Vitest |
+| Linting | ESLint + angular-eslint + Prettier |
 
-## Usage model
+---
 
-1. Global context comes from `copilot-instructions.md` and `AGENTS.md`.
-2. File-scoped constraints come from `instructions/*.instructions.md`.
-3. Reusable execution guidance comes from `skills/*/SKILL.md`.
-4. Task entry points are provided by `prompts/*.prompt.md` and `agents/*.agent.md`.
+## Features
+
+- Load and display IFC files directly in the browser
+- Orbit camera controls with automatic model framing
+- Element selection with IFC property inspection
+- Linear and area measurement tools
+- Hover highlighting and selection subsets
+- Keyboard shortcuts for tool switching
+- Zoneless Angular with OnPush throughout
+
+---
+
+## Getting Started
+
+**Prerequisites:** Node.js 20+, npm 11+
+
+```bash
+# Install dependencies (also applies patches via postinstall)
+npm install
+
+# Start the development server
+npm start
+```
+
+Open `http://localhost:4200` in your browser.
+
+---
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm start` | Start dev server |
+| `npm run build` | Production build |
+| `npm run watch` | Build in watch mode |
+| `npm test` | Run unit tests with Vitest |
+| `npm run lint:fix` | Lint and auto-fix |
+| `npm run format` | Format with Prettier |
+
+---
+
+## Project Structure
+
+```
+src/app/
+├── demo/                    # Smart container — wires scene, tools, and panels
+├── component/               # Presentational UI components
+├── feature/
+│   ├── scene-graph/         # SceneService, Three.js runtime, IFC helpers
+│   └── measurement/         # Linear and area measurement services
+├── models/                  # Domain types
+└── pipes/                   # Shared pipes
+```
+
+IFC demo files are served from `public/assets/ifc/`.  
+`web-ifc` WASM binaries are resolved from `public/assets/wasm/` via `angular.json` asset config.
+
+---
+
+## License
+
+MIT

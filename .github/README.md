@@ -8,14 +8,14 @@ Built with Angular 21+, standalone components, signals, zoneless change detectio
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Angular 21+ (standalone, signals, zoneless) |
-| 3D Rendering | Three.js + angular-three |
-| IFC Loading | web-ifc / web-ifc-three |
-| Styling | Tailwind CSS v4 |
-| Testing | Vitest |
-| Linting | ESLint + angular-eslint + Prettier |
+| Layer        | Technology                                  |
+| ------------ | ------------------------------------------- |
+| Framework    | Angular 21+ (standalone, signals, zoneless) |
+| 3D Rendering | Three.js + angular-three                    |
+| IFC Loading  | web-ifc / web-ifc-three                     |
+| Styling      | Tailwind CSS v4                             |
+| Testing      | Vitest                                      |
+| Linting      | ESLint + angular-eslint + Prettier          |
 
 ---
 
@@ -49,14 +49,14 @@ Open `http://localhost:4200` in your browser.
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `npm start` | Start dev server |
-| `npm run build` | Production build |
-| `npm run watch` | Build in watch mode |
-| `npm test` | Run unit tests with Vitest |
-| `npm run lint:fix` | Lint and auto-fix |
-| `npm run format` | Format with Prettier |
+| Command            | Description                |
+| ------------------ | -------------------------- |
+| `npm start`        | Start dev server           |
+| `npm run build`    | Production build           |
+| `npm run watch`    | Build in watch mode        |
+| `npm test`         | Run unit tests with Vitest |
+| `npm run lint:fix` | Lint and auto-fix          |
+| `npm run format`   | Format with Prettier       |
 
 ---
 
